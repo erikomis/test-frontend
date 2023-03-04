@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCadastro } from "../../context/userCadastro";
 import { Step1 } from "./Step1";
 import { Step2 } from "./Step2";
 
@@ -27,12 +28,13 @@ export function FormSteps({ handleClose }: FormStepsProps) {
   const [step, setStep] = useState(1);
 
   const [formSteps, setFormSteps] = useState<FormValues>({} as FormValues);
-
+  const { userCreate } = useCadastro();
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
 
   const handleComplete = () => {
-    
+    userCreate(formSteps);
+    handleClose();
   };
   return (
     <>

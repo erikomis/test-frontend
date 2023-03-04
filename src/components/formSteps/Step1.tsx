@@ -16,6 +16,7 @@ type FormValuesform1 = {
   bairro: string;
   cidade: string;
   uf: string;
+  numero: string;
 };
 
 const schemaStep = Yup.object().shape({
@@ -41,6 +42,7 @@ const schemaStep = Yup.object().shape({
   bairro: Yup.string().required("Campo obrigatório"),
   cidade: Yup.string().required("Campo obrigatório"),
   uf: Yup.string().required("Campo obrigatório"),
+  numero: Yup.string().required("Campo obrigatório"),
 });
 
 type Step1Props = {
@@ -75,19 +77,21 @@ export function Step1({
       bairro: formSteps?.bairro || "",
       cidade: formSteps?.cidade || "",
       uf: formSteps?.uf || "",
+      numero: formSteps?.numero || "",
     },
   });
 
   useEffect(() => {
     const cep = watch("cep");
-    console.log("ceop entoi", cep);
+  
     if (cep.length >= 8) {
       const fecthCep = async () => {
         const respone = await axios.get(
           `https://viacep.com.br/ws/${cep}/json/`
         );
         if (respone?.data?.cep) {
-          const { uf, logradouro, localidade, bairro, completo } = respone.data;
+          const { uf, logradouro, localidade, bairro, completo } =
+            respone.data;
           setValue("uf", uf);
 
           setValue("cidade", localidade);
@@ -127,7 +131,7 @@ export function Step1({
       .replace(/(-\d{3})\d+?$/, "$1");
   }
 
-  console.log(watch("cep"), "cep", watch("cnpj"));
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
@@ -191,6 +195,15 @@ export function Step1({
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            label="Numero"
+            fullWidth
+            {...register("numero", { required: true })}
+            error={!!errors.endereco}
+            helperText={errors.numero &&  errors.numero.message}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField
             label="Complemento"
             fullWidth
             {...register("complemento")}
@@ -205,7 +218,7 @@ export function Step1({
             fullWidth
             {...register("bairro", { required: true })}
             error={!!errors.bairro}
-            helperText={errors.bairro && "Campo obrigatório"}
+            helperText={errors.bairro && errors.bairro.message}
             InputLabelProps={{
               shrink: !!watch("bairro"),
             }}
@@ -217,7 +230,7 @@ export function Step1({
             fullWidth
             {...register("cidade", { required: true })}
             error={!!errors.cidade}
-            helperText={errors.cidade && "Campo obrigatório"}
+            helperText={errors.cidade && errors.cidade.message}
             InputLabelProps={{
               shrink: !!watch("cidade"),
             }}
@@ -229,7 +242,7 @@ export function Step1({
             fullWidth
             {...register("uf", { required: true })}
             error={!!errors.uf}
-            helperText={errors.uf && "Campo obrigatório"}
+            helperText={errors.uf && errors.uf.message}
             InputLabelProps={{
               shrink: !!watch("uf"),
             }}

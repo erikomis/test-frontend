@@ -42,7 +42,7 @@ export function Step2({
     },
   });
 
-  const _onSubmit = (data) => {
+  const _onSubmit = (data: any) => {
     setFormSteps({ ...formSteps, ...data });
     onSubmit();
   };
