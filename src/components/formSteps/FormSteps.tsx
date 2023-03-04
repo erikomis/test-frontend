@@ -7,7 +7,7 @@ type FormStepsProps = {
   handleClose: () => void;
 };
 
-type FormValues = {
+export type FormValues = {
   cnpj: string;
   nomeFantasia: string;
   razaoSocial: string;
