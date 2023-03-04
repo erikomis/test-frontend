@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, TextField, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
-
+import { FormValues } from "./FormSteps";
 const schemaStep2 = Yup.object().shape({
   nome: Yup.string().required("Campo obrigatório"),
   sobrenome: Yup.string().required("Campo obrigatório"),

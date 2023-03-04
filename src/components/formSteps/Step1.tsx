@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useEffect } from "react";
-
+import { FormValues } from "./FormSteps";
 type FormValuesform1 = {
   cnpj: string;
   nomeFantasia: string;
@@ -83,15 +83,14 @@ export function Step1({
 
   useEffect(() => {
     const cep = watch("cep");
-  
+
     if (cep.length >= 8) {
       const fecthCep = async () => {
         const respone = await axios.get(
           `https://viacep.com.br/ws/${cep}/json/`
         );
         if (respone?.data?.cep) {
-          const { uf, logradouro, localidade, bairro, completo } =
-            respone.data;
+          const { uf, logradouro, localidade, bairro, completo } = respone.data;
           setValue("uf", uf);
 
           setValue("cidade", localidade);
@@ -106,7 +105,7 @@ export function Step1({
     }
   }, [watch("cep")]);
 
-  const onSubmit = (data: FormValuesform1) => {
+  const onSubmit = (data: Partial<FormValuesform1>) => {
     setFormSteps(data);
     onNext();
   };
@@ -130,7 +129,6 @@ export function Step1({
       .replace(/(\d{5})(\d)/, "$1-$2")
       .replace(/(-\d{3})\d+?$/, "$1");
   }
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -199,7 +197,7 @@ export function Step1({
             fullWidth
             {...register("numero", { required: true })}
             error={!!errors.endereco}
-            helperText={errors.numero &&  errors.numero.message}
+            helperText={errors.numero && errors.numero.message}
           />
         </Grid>
         <Grid item xs={12} md={6}>
