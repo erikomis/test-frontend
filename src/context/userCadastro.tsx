@@ -44,13 +44,17 @@ export const CadastroProvider = ({ children }: CadastroProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   const userRequest = async (page: number, size: number) => {
-    const response = await api.get("/user", {
-      params: {
-        page,
-        size,
-      },
-    });
-    setUsuarios(response.data);
+    try {
+      const response = await api.get("/user", {
+        params: {
+          page,
+          size,
+        },
+      });
+      setUsuarios(response.data);
+    } catch (error) {
+      toast.error("Erro ao carregar usuários");
+    }
   };
 
   useEffect(() => {
