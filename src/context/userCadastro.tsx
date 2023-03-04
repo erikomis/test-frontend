@@ -13,7 +13,7 @@ type CadastroContextData = {
   setUsuarios: React.Dispatch<React.SetStateAction<UserResponse>>;
   userRequest: (page: number, size: number) => Promise<void>;
   handleDeleteUser: (id: number | number[], page: number, size: number) => void;
-  
+  userCreate: (data: any) => Promise<void>;
 };
 type User = {
   id: number;
@@ -60,7 +60,7 @@ export const CadastroProvider = ({ children }: CadastroProviderProps) => {
 
   const userCreate = async (data: any) => {
     try {
-      const response = await api.post("/user/create", data);
+      const response = await api.post("/user", data);
       toast.success("Usuário criado com sucesso!");
       userRequest(1, 10);
     } catch (error: any) {
@@ -74,12 +74,13 @@ export const CadastroProvider = ({ children }: CadastroProviderProps) => {
     size: number
   ) => {
     try {
-      console.log(id, "id");
       const response = await api.delete(`/user/delete/`, {
         query: {
           id,
         },
       });
+      toast.success("Usuário deletado com sucesso!");
+      userRequest(page, size);
     } catch (error: any) {
       toast.error(error.response?.data?.message);
     }
@@ -93,6 +94,7 @@ export const CadastroProvider = ({ children }: CadastroProviderProps) => {
         setUsuarios,
         handleDeleteUser,
         loading,
+        userCreate,
       }}
     >
       {children}
